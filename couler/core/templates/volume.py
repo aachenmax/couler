@@ -32,7 +32,8 @@ class Volume(object):
             return OrderedDict(
                 {
                     "name": self.name,
-                    "configMap": {"name": self.config_map},
+                    "configMap": {"name": self.config_map,
+                                  "defaultMode": "0777"},
                 }
             )
 
