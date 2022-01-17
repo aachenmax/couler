@@ -15,23 +15,40 @@ from collections import OrderedDict
 
 
 class Volume(object):
-    def __init__(self, name, claim_name):
+    def __init__(self, name, claim_name=None, config_map=None):
         self.name = name
         self.claim_name = claim_name
+        self.config_map = config_map
 
     def to_dict(self):
-        return OrderedDict(
-            {
-                "name": self.name,
-                "persistentVolumeClaim": {"claimName": self.claim_name},
-            }
-        )
+        if self.claim_name is not None:
+            return OrderedDict(
+                {
+                    "name": self.name,
+                    "persistentVolumeClaim": {"claimName": self.claim_name},
+                }
+            )
+        elif self.config_map is not None:
+            return OrderedDict(
+                {
+                    "name": self.name,
+                    "configMap": {"name": self.config_map},
+                }
+            )
+
 
 
 class VolumeMount(object):
-    def __init__(self, name, mount_path):
+    def __init__(self, name, mount_path, sub_path=None):
         self.name = name
         self.mount_path = mount_path
+        self.sub_path = None
 
     def to_dict(self):
-        return OrderedDict({"name": self.name, "mountPath": self.mount_path})
+        if self.sub_path is not None:
+            return OrderedDict({"name": self.name,
+                                "mountPath": self.mount_path,
+                                "subPath": self.sub_path})
+        else:
+            return OrderedDict({"name": self.name,
+                                "mountPath": self.mount_path})
