@@ -47,6 +47,7 @@ class Container(Template):
         volumes=None,
         cache=None,
         parallelism=None,
+        additional_step_config=None
     ):
         Template.__init__(
             self,
@@ -60,6 +61,7 @@ class Container(Template):
             daemon=daemon,
             cache=cache,
             parallelism=parallelism,
+            additional_step_config=additional_step_config,
         )
         self.image = image
         self.command = utils.make_list_if_not(command)

@@ -63,6 +63,7 @@ def step_repr(
     action=None,
     volume_mounts=None,
     cache=None,
+    additional_step_config=None
 ):
     assert step_name is not None
     assert tmpl_name is not None
@@ -136,6 +137,9 @@ def step_repr(
 
     if states._when_prefix is not None:
         pb_step.when = states._when_prefix
+
+    if additional_step_config is not None:
+        pb_step.additional_step_config = additional_step_config
 
     # add template to proto workflow
     wf = get_default_proto_workflow()

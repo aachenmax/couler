@@ -18,7 +18,7 @@ from couler.core import states, utils
 from couler.core.templates import OutputArtifact, Step
 
 
-def update_step(func_name, args, step_name, caller_line):
+def update_step(func_name, args, step_name, caller_line, additional_step_config=None):
     if states.workflow.dag_mode_enabled():
         step_name = _update_dag_tasks(
             func_name,
@@ -36,9 +36,10 @@ def update_step(func_name, args, step_name, caller_line):
                 states._concurrent_func_line,
                 args,
                 func_name,
+                additional_step_config
             )
         else:
-            step_name = _update_steps(func_name, caller_line, args)
+            step_name = _update_steps(func_name, caller_line, args, None, additional_step_config)
 
     return step_name
 
@@ -129,7 +130,7 @@ def _update_dag_tasks(
     return function_id
 
 
-def _update_steps(function_name, caller_line, args=None, template_name=None):
+def _update_steps(function_name, caller_line, args=None, template_name=None, additional_step_config=None):
     """
     A step in Argo YAML contains name, related template and parameters.
     Here we insert a single step into the global steps.
@@ -150,6 +151,9 @@ def _update_steps(function_name, caller_line, args=None, template_name=None):
 
         if states._when_prefix is not None:
             step.when = states._when_prefix
+
+        if additional_step_config is not None:
+            step.additional_step_config=additional_step_config
 
         if args is not None:
             parameters, artifacts = _get_params_and_artifacts_from_args(
