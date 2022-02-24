@@ -59,6 +59,7 @@ def run_script(
     working_dir=None,
     node_selector=None,
     cache=None,
+    additional_step_config=None,
 ):
     """
     Generate an Argo script template.  For example,
@@ -160,11 +161,12 @@ def run_script(
             working_dir=working_dir,
             node_selector=node_selector,
             cache=cache,
+            additional_step_config=additional_step_config
         )
         states.workflow.add_template(template)
 
     step_name = step_update_utils.update_step(
-        func_name, args, step_name, caller_line
+        func_name, args, step_name, caller_line, additional_step_config
     )
 
     # TODO: need to switch to use field `output` directly
@@ -189,6 +191,7 @@ def run_script(
             resources=resources,
             volume_mounts=volume_mounts,
             cache=cache,
+            additional_step_config=additional_step_config
         )
         proto_repr.add_deps_to_step(step_name)
     return rets
@@ -216,6 +219,7 @@ def run_container(
     node_selector=None,
     cache=None,
     parallelism=None,
+    additional_step_config=None
 ):
     """
     Generate an Argo container template.  For example, the template whalesay
@@ -315,11 +319,12 @@ def run_container(
             node_selector=node_selector,
             cache=cache,
             parallelism=parallelism,
+            additional_step_config=additional_step_config
         )
         states.workflow.add_template(template)
 
     step_name = step_update_utils.update_step(
-        func_name, args, step_name, caller_line
+        func_name, args, step_name, caller_line, additional_step_config
     )
 
     # TODO: need to switch to use field `output` directly
@@ -346,6 +351,7 @@ def run_container(
             secret=states.get_secret(secret),
             volume_mounts=volume_mounts,
             cache=cache,
+            additional_step_config=additional_step_config
         )
         proto_repr.add_deps_to_step(step_name)
     return rets

@@ -19,13 +19,14 @@ from couler.core.templates.template import Template
 
 class Step(object):
     def __init__(
-        self, name, template=None, arguments=None, when=None, with_items=None
+        self, name, template=None, arguments=None, when=None, with_items=None, additional_step_config=None
     ):
         self.name = name
         self.template = template
         self.arguments = arguments
         self.with_items = with_items
         self.when = when
+        self.additional_step_config = additional_step_config
 
     def to_dict(self):
         d = OrderedDict({"name": self.name})
@@ -37,6 +38,12 @@ class Step(object):
             d.update({"arguments": self.arguments})
         if utils.non_empty(self.with_items):
             d.update({"withItems": self.with_items})
+        if self.additional_step_config is not None:
+            if type(self.additional_step_config)==list:
+                for item in self.additional_step_config:
+                    d.update(item)
+            elif type(self.additional_step_config)==dict:
+                d.update(self.additional_step_config)
         return d
 
 

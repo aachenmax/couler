@@ -29,6 +29,7 @@ class Template(object):
         daemon=False,
         cache=None,
         parallelism=None,
+        additional_step_config=None
     ):
         self.name = name
         self.output = output
@@ -40,6 +41,7 @@ class Template(object):
         self.daemon = daemon
         self.cache = cache
         self.parallelism: int = parallelism
+        self.additional_step_config=additional_step_config
 
     def to_dict(self):
         template = OrderedDict({"name": self.name})
